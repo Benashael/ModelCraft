@@ -21,7 +21,7 @@ import IPython
 import plotly
 import plotly.graph_objs as go
 
-st.set_page_config(page_title="AutoML", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="Model Craft", page_icon="🤖", layout="wide")
 
 # Define a function to load your dataset
 @st.cache_data
