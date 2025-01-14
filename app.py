@@ -30,7 +30,7 @@ def load_data(uploaded_file):
     return data
 
 # Upload a dataset
-uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+uploaded_file = st.file_uploader("📤 Upload a CSV file", type=["csv"])
 
 # Initialize data as None
 data = None
@@ -39,90 +39,106 @@ data = None
 if uploaded_file is not None:
     try:
         data = pd.read_csv(uploaded_file)
+        st.success("✅ Dataset uploaded successfully!")
     except (ValueError, pd.errors.ParserError):
-        st.error("The uploaded dataset is not in a valid format or language. Please upload a valid dataset in CSV format.")
+        st.error("❌ The uploaded dataset is not in a valid format or language. Please upload a valid dataset in CSV format.")
         data = None  # Set data to None if it's not valid
 
 # App description
-st.title("Model Craft: Accelerate Model Building and Optimization")
-st.write("This application allows you to perform various tasks, including data cleaning, encoding, visualization, model selection, and more. You can upload your dataset and choose from a variety of machine learning tasks.")
+st.title("✨🚀 Model Craft: Accelerate Model Building and Optimization")
+st.write("This application allows you to perform various tasks, including data cleaning 🧹, encoding 🔑, visualization 📊, model selection 🤖, and more. You can upload your dataset 📁 and choose from a variety of machine learning tasks.")
 
 # Create Streamlit pages
-page = st.sidebar.radio("**Select a Page**", ["Home Page", "Data Profiling", "Data Encoding", "Data Preprocessing", "Data Cleaning", "Data Visualization", "Feature Selection", "Hyperparameter Tuning", "ML Model Selection", "Classification (ML)", "Regression (ML)", "Clustering (ML)", "Model Evaluation"])
+page = st.sidebar.radio("**Select a Page 📄**", [
+    "🏠 Home Page", 
+    "📋 Data Profiling", 
+    "🔑 Data Encoding", 
+    "🛠️ Data Preprocessing", 
+    "🧹 Data Cleaning", 
+    "📊 Data Visualization", 
+    "🎯 Feature Selection", 
+    "⚙️ Hyperparameter Tuning", 
+    "🤖 ML Model Selection", 
+    "📂 Classification (ML)", 
+    "📉 Regression (ML)", 
+    "🔍 Clustering (ML)", 
+    "📈 Model Evaluation"
+])
+
 
 # Introduction Page
-if page == "Home Page":
-    st.title("Introduction")
+if page == "🏠 Home Page":
+    st.title("✨ Introduction ✨")
 
-    st.header("Welcome to the AutoDS Application!")
+    st.header("👋 Welcome to the AutoDS Application!")
     st.write("This application is designed to help you streamline the process of data analysis and machine learning model selection. Follow the steps below to make the most of this application:")
 
-    st.subheader("Home Page")
+    st.subheader("🏠 Home Page")
     st.markdown(
         "The **Home Page** is the starting point of the application. You can navigate to different sections of the app using the sidebar navigation."
     )
 
-    st.subheader("Data Profiling Page")
+    st.subheader("📋 Data Profiling Page")
     st.markdown(
         "The **Data Profiling Page** allows you to gain a detailed understanding of your dataset. Explore dataset shape, column names, data types, summary statistics, categorical features, missing values, correlation matrix, and data head."
     )
 
-    st.subheader("Data Encoding Page")
+    st.subheader("🔑 Data Encoding Page")
     st.markdown(
         "The **Data Encoding Page** empowers you to encode categorical variables in the dataset. Select a dataset and apply different encoding techniques to handle categorical variables."
     )
 
-    st.subheader("Data Preprocessing Page")
+    st.subheader("🛠️ Data Preprocessing Page")
     st.markdown(
         "The **Data Preprocessing Page** prepares your dataset for machine learning by scaling features, splitting data, and handling outliers."
     )
     
-    st.subheader("Data Cleaning Page")
+    st.subheader("🧹 Data Cleaning Page")
     st.markdown(
         "The **Data Cleaning Page** allows you to clean missing values in your dataset. Select a dataset and apply different cleaning techniques to handle missing values."
     )
 
-    st.subheader("Data Visualization Page")
+    st.subheader("📊 Data Visualization Page")
     st.markdown(
         "The **Data Visualization Page** lets you visualize the dataset using various techniques such as histograms, scatter plots, and heat maps. Select a dataset and explore its visual representations."
     )
 
-    st.subheader("Feature Selection Page")
+    st.subheader("🎯 Feature Selection Page")
     st.markdown(
         "The **Feature Selection Page** allows you to choose and analyze the most important features in your dataset for machine learning. Feature selection is a critical step to improve model performance and reduce the complexity of your model."
     )
     
-    st.subheader("Hyperparameter Tuning Page")
+    st.subheader("⚙️ Hyperparameter Tuning Page")
     st.markdown(
         "The **Hyperparameter Tuning Page** allows you to fine-tune machine learning models with user-selected hyperparameters for optimal performance."
     )
 
-    st.subheader("ML Model Selection Page")
+    st.subheader("🤖 ML Model Selection Page")
     st.markdown(
         "The **ML Model Selection Page** helps you choose the right machine learning model based on the problem type (classification, regression, or time series). Pick a dataset and select the target variable to find the best machine learning model."
     )
 
-    st.subheader("Classification (ML) Page")
+    st.subheader("📂 Classification (ML) Page")
     st.markdown(
         "The **Classification (ML) Page** allows you to perform automated machine learning (AutoML) for classification problems using the `lazyClassifier` library. Select a dataset, choose the target variable, and run the AutoML algorithm."
     )
 
-    st.subheader("Regression (ML) Page")
+    st.subheader("📉 Regression (ML) Page")
     st.markdown(
         "The **Regression (ML) Page** enables you to perform automated machine learning (AutoML) for regression problems using the `lazyRegression` library. Select a dataset, choose the target variable, and run the AutoML algorithm."
     )
 
-    st.subheader("Clustering (ML) Page")
+    st.subheader("🔍 Clustering (ML) Page")
     st.markdown(
         "The **Clustering (ML) Page** empowers you to perform automated machine learning (AutoML) for clustering problems. Clustering is a technique used to group similar data points together. In this page, you can select a dataset and choose the number of clusters. Note: This task is suitable for small datasets."
     )
 
-    st.subheader("Model Evaluation Page")
+    st.subheader("📈 Model Evaluation Page")
     st.markdown(
         "The **Model Evaluation Page** is where you can evaluate machine learning models on your dataset. Choose the problem type (classification or regression), select X and Y variables, and pick a model to see evaluation results."
     )
     
-    st.subheader("Using the App")
+    st.subheader("📝 Using the App")
     st.markdown(
         "1. Start on the **Home Page**, and then navigate to the pages that match your needs."
     )
@@ -136,7 +152,7 @@ if page == "Home Page":
         "4. Make sure to select the appropriate problem type (classification or regression) and follow any additional instructions for model selection and evaluation."
     )
 
-    st.subheader("Additional Tips")
+    st.subheader("💡 Additional Tips")
     st.markdown(
         "5. You can always refer back to the **Introduction** page for a quick overview of the app's functionality and how to use it."
     )
@@ -148,11 +164,11 @@ if page == "Home Page":
     )
 
     st.markdown(
-        "Enjoy using the Model Craft Application and have a productive data analysis and model selection experience!"
+        "🎉 Enjoy using the Model Craft Application and have a productive data analysis and model selection experience!"
     )
-    
+
 # Data Profiling Page
-elif page == "Data Profiling":
+elif page == "📋 Data Profiling":
     st.title("Data Profiling Page")
 
     if data is not None and not data.empty:
