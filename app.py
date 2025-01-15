@@ -898,8 +898,7 @@ elif page == "📉 Regression (ML)":
                             })
                             feature_importances = feature_importances.sort_values(by='Importance', ascending=False)
                             st.write(feature_importances)
-        else:
-            st.warning("🚫 This page is only available for datasets without categorical columns.")
+                        
     else:
         st.warning("📂 Please upload a dataset to continue.")
         
