@@ -932,16 +932,16 @@ elif page == "🔍 Clustering (ML)":
                 kmeans = KMeans(n_clusters=num_clusters, random_state=42)
                 X_encoded['Cluster'] = kmeans.fit_predict(X_encoded)
 
+                # Display the clustering result
+                st.write(f"🔍 Performed K-Means clustering with {num_clusters} clusters.")
+                st.write("📊 Clustered Data Preview:")
+                st.write(X_encoded)
+
                 # Provide download link for the dataset with clusters
                 csv_data_encoded = X_encoded.to_csv(index=False)
                 b64 = base64.b64encode(csv_data_encoded.encode()).decode()
                 href = f'<a href="data:file/csv;base64,{b64}" download="clustered_data.csv">📥 Download Clustered Dataset</a>'
                 st.markdown(href, unsafe_allow_html=True)
-
-                # Display the clustering result
-                st.write(f"🔍 Performed K-Means clustering with {num_clusters} clusters.")
-                st.write("📊 Clustered Data Preview:")
-                st.write(X_encoded)
 
     else:
         st.warning("📂 Please upload a dataset in the 'AutoML for Clustering' step to continue.")
