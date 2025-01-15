@@ -23,6 +23,9 @@ import plotly.graph_objs as go
 
 st.set_page_config(page_title="Model Craft", page_icon="🤖", layout="wide")
 
+# App description
+st.title("✨🚀 Model Craft: Accelerate Model Building and Optimization")
+
 # Define a function to load your dataset
 @st.cache_data
 def load_data(uploaded_file):
@@ -43,9 +46,6 @@ if uploaded_file is not None:
     except (ValueError, pd.errors.ParserError):
         st.error("❌ The uploaded dataset is not in a valid format or language. Please upload a valid dataset in CSV format.")
         data = None  # Set data to None if it's not valid
-
-# App description
-st.title("✨🚀 Model Craft: Accelerate Model Building and Optimization")
 
 # Create Streamlit pages
 page = st.sidebar.radio("**Select a Page 📄**", [
