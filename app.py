@@ -488,7 +488,7 @@ elif page == "🧹 Data Cleaning":
                 file_name="cleaned_data.csv"
             )
     else:
-        st.warning("⚠️ **Please upload a dataset in the 'Data Cleaning' step to continue.**")
+        st.warning("⚠️ Please upload a dataset in the 'Data Cleaning' step to continue.")
 
 # Data Visualization Page
 elif page == "📊 Data Visualization":
@@ -516,9 +516,9 @@ elif page == "📊 Data Visualization":
                 st.write("🌊 **Area Chart:**")
                 st.area_chart(data[columns_to_visualize])
         else:
-            st.warning("⚠️ **No numerical columns found in the dataset. Please upload a dataset with numerical data to continue.**")
+            st.warning("⚠️ No numerical columns found in the dataset. Please upload a dataset with numerical data to continue.")
     else:
-        st.warning("⚠️ **Please upload a dataset to continue.**")
+        st.warning("⚠️ Please upload a dataset to continue.")
         
 # Feature Selection Page
 elif page == "🎯 Feature Selection":
@@ -587,13 +587,13 @@ elif page == "🎯 Feature Selection":
                     st.write(f"🏆 **Top-Ranked Feature:** {top_feature}")
                     st.write(f"📉 **Mean Squared Error (MSE):** {mse:.2f}")
                 else:
-                    st.warning("⚠️ **Please select at least one feature for analysis.**")
+                    st.warning("⚠️ Please select at least one feature for analysis.")
             else:
-                st.error("🚫 **The dataset contains categorical features and is not suitable for feature selection.**")
+                st.error("🚫 The dataset contains categorical features and is not suitable for feature selection.")
         else:
-            st.warning("⚠️ **The dataset exceeds the size limits for this page (max rows: 5000, max columns: 50).**")
+            st.warning("⚠️ The dataset exceeds the size limits for this page (max rows: 5000, max columns: 50).")
     else:
-        st.error("❌ **Please upload a valid dataset in the 'Feature Selection' step to continue.**")
+        st.error("❌ Please upload a valid dataset in the 'Feature Selection' step to continue.")
 
 # Hyperparameter Tuning Page
 elif page == "⚙️ Hyperparameter Tuning":
@@ -691,11 +691,11 @@ elif page == "⚙️ Hyperparameter Tuning":
                     else:
                         st.error("⚠️ Please select a valid target variable and at least one other variable.")
                 except Exception as e:
-                    st.error(f"❌ **An error occurred during hyperparameter tuning:** {str(e)}")
+                    st.error(f"❌ An error occurred during hyperparameter tuning: {str(e)}")
             else:
-                st.error("🚫 **An error occurred while selecting the model. Please try again.**")
+                st.error("🚫 An error occurred while selecting the model. Please try again.")
     else:
-        st.warning("⚠️ **Please upload a dataset in the 'Data Cleaning' step to continue.**")
+        st.warning("⚠️ Please upload a dataset in the 'Data Cleaning' step to continue.")
 
 # ML Model Selection Page
 elif page == "🤖 ML Model Selection":
@@ -890,14 +890,13 @@ elif page == "📉 Regression (ML)":
                         # Display additional regression metrics if needed
                         st.write(f"📏 **R2 Score:** {model.score(X_test, Y_test):.2f}")
                         
-                        if hasattr(model, 'feature_importances_'):
-                            st.write("🔍 **Feature Importances:**")
-                            feature_importances = pd.DataFrame({
-                                'Feature': X_variables,
-                                'Importance': model.feature_importances_
-                            })
-                            feature_importances = feature_importances.sort_values(by='Importance', ascending=False)
-                            st.write(feature_importances)
+                        st.write("🔍 **Feature Importances:**")
+                        feature_importances = pd.DataFrame({
+                            'Feature': X_variables,
+                            'Importance': model.feature_importances_
+                        })
+                        feature_importances = feature_importances.sort_values(by='Importance', ascending=False)
+                        st.write(feature_importances)
                         
     else:
         st.warning("📂 Please upload a dataset to continue.")
