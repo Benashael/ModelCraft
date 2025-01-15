@@ -68,9 +68,9 @@ page = st.sidebar.radio("**Select a Page 📄**", [
 
 # Introduction Page
 if page == "🏠 Home Page":
-    st.title("✨ Introduction ✨")
+    st.header("✨ Introduction ✨")
 
-    st.header("👋 Welcome to the AutoDS Application!")
+    st.header("👋 Welcome to the Model Craft Application!")
     st.write("This application is designed to help you streamline the process of data analysis and machine learning model selection. Follow the steps below to make the most of this application:")
 
     st.subheader("🏠 Home Page")
@@ -169,265 +169,252 @@ if page == "🏠 Home Page":
 
 # Data Profiling Page
 elif page == "📋 Data Profiling":
-    st.title("Data Profiling Page")
+    st.header("📋 Data Profiling Page")
 
     if data is not None and not data.empty:
-        st.write("Dataset Overview")
+        st.write("### 🔍 Dataset Overview")
 
         # Dataset Shape
-        st.write("Dataset Shape:", data.shape)
+        st.write("**🗂️ Dataset Shape:**", data.shape)
 
         # Column Names
-        st.subheader("Column Names:")
+        st.subheader("📑 Column Names:")
         st.write(data.columns)
 
         # Data Types
-        st.subheader("Data Types:")
+        st.subheader("📂 Data Types:")
         st.write(data.dtypes)
 
         # Summary Statistics
-        st.subheader("Summary Statistics:")
+        st.subheader("📊 Summary Statistics:")
         st.write(data.describe())
 
         # Categorical Features
         categorical_features = data.select_dtypes(include=['object']).columns.tolist()
+        st.subheader("🔠 Categorical Features:")
         if categorical_features:
-            st.subheader("Categorical Features:")
-            st.write("Number of Categorical Features:", len(categorical_features))
-            st.write("Categorical Feature Names:")
+            st.write("**Number of Categorical Features:**", len(categorical_features))
+            st.write("**Categorical Feature Names:**")
             st.write(categorical_features)
         else:
-            st.subheader("Categorical Features:")
-            st.write("No Categorical Features in the dataset.")
+            st.write("🚫 No Categorical Features in the dataset.")
 
         # Missing Values
         missing_values = data.isnull().sum()
+        st.subheader("⚠️ Missing Values:")
         if missing_values.sum() > 0:
-            st.subheader("Missing Values:")
-            st.write("Total Missing Values:", missing_values.sum())
-            st.write("Missing Values by Column:")
+            st.write("**Total Missing Values:**", missing_values.sum())
+            st.write("**Missing Values by Column:**")
             st.write(missing_values[missing_values > 0])
         else:
-            st.subheader("Missing Values:")
-            st.write("No missing values in the dataset.")
+            st.write("🎉 No missing values in the dataset.")
 
         # Correlation Matrix (only if there are no categorical features)
+        st.subheader("📈 Correlation Matrix:")
         if not categorical_features:
-            st.subheader("Correlation Matrix:")
             correlation_matrix = data.corr()
             st.write(correlation_matrix)
         else:
-            st.subheader("Correlation Matrix:")
-            st.write("Cannot calculate correlation matrix because categorical features are present.")
+            st.write("⚠️ Correlation matrix is not calculated because categorical features are present.")
 
         # Data Head
-        st.subheader("Data Head:")
+        st.subheader("🔝 Data Head (First 5 Rows):")
         st.write(data.head())
 
         # Data Tail
-        st.subheader("Data Tail:")
+        st.subheader("🔚 Data Tail (Last 5 Rows):")
         st.write(data.tail()) 
 
     else:
-        st.error("Please upload a valid dataset in the 'Data Profiling' step to continue.")
+        st.error("🚨 Please upload a valid dataset in the 'Data Profiling' step to continue.")
 
 # Data Encoding Page
-elif page == "Data Encoding":
-    st.title("Data Encoding Page")
+elif page == "🔑 Data Encoding":
+    st.header("🔑 Data Encoding Page")
     if data is not None:
-        st.write("Dataset:")
+        st.write("### 🗂️ Dataset Overview:")
         st.write(data)
-        st.write("Dataset Shape:")
-        st.write(data.shape)
+        st.write("**📏 Dataset Shape:**", data.shape)
 
         # Define the maximum allowed dataset size for data encoding
         max_rows_for_encoding = 5000
         max_columns_for_encoding = 50
 
         if data.shape[0] > max_rows_for_encoding or data.shape[1] > max_columns_for_encoding:
-            st.warning(f"Note: The dataset size exceeds the maximum allowed for data encoding (max rows: {max_rows_for_encoding}, max columns: {max_columns_for_encoding}).")
+            st.warning(f"⚠️ Note: The dataset size exceeds the maximum allowed for data encoding (max rows: {max_rows_for_encoding}, max columns: {max_columns_for_encoding}).")
         else:
-            st.subheader("Encode Categorical Variables")
+            st.subheader("🔠 Encode Categorical Variables")
             categorical_cols = data.select_dtypes(include=["object"]).columns
 
             if not categorical_cols.empty:
-                selected_cols = st.multiselect("Select Categorical Columns to Encode", categorical_cols)
+                st.write(f"**📝 Categorical Columns Available:** {', '.join(categorical_cols)}")
+                selected_cols = st.multiselect("📋 Select Categorical Columns to Encode", categorical_cols)
 
                 if not selected_cols:
-                    st.warning("Please select one or more categorical columns to encode.")
+                    st.warning("⚠️ Please select one or more categorical columns to encode.")
                 else:
                     for col in selected_cols:
-                        encoding_option = st.radio(f"Select Encoding Method for '{col}'", ["Label Encoding", "One-Hot Encoding"])
+                        encoding_option = st.radio(
+                            f"🎯 Select Encoding Method for '{col}'",
+                            ["Label Encoding", "One-Hot Encoding"],
+                            key=f"encoding_option_{col}"
+                        )
 
                         if encoding_option == "Label Encoding":
                             le = LabelEncoder()
                             data[col] = le.fit_transform(data[col])
+                            st.success(f"✅ Applied Label Encoding on '{col}'.")
                         else:
                             data = pd.get_dummies(data, columns=[col], prefix=[col])
-                    
-                    st.write("Data After Encoding Categorical Variables:")
+                            st.success(f"✅ Applied One-Hot Encoding on '{col}'.")
+
+                    st.write("### ✅ Data After Encoding:")
                     st.write(data)
 
                     # Allow users to download the encoded dataset
-                    if st.button("Download Encoded Dataset"):
-                        encoded_csv = data.to_csv(index=False)
-                        encoded_csv = encoded_csv.encode()
-                        st.download_button(
-                            label="Click here to download encoded dataset as CSV",
-                            data=encoded_csv,
-                            key="encoded_data.csv",
-                            file_name="encoded_data.csv"
-                        )
+                    st.subheader("📥 Download Encoded Dataset")
+                    encoded_csv = data.to_csv(index=False).encode()
+                    st.download_button(
+                        label="💾 Download Encoded Dataset as CSV",
+                        data=encoded_csv,
+                        file_name="encoded_data.csv",
+                        mime="text/csv"
+                    )
             else:
-                st.warning("No categorical columns found in the dataset for encoding.")
+                st.warning("🚫 No categorical columns found in the dataset for encoding.")
     else:
-        st.warning("Please upload a dataset to continue.")
+        st.warning("🚨 Please upload a dataset to proceed with encoding.")
 
 # Data Preprocessing Page
-elif page == "Data Preprocessing":
-    st.title("Data Preprocessing Page")
+elif page == "🛠️ Data Preprocessing":
+    st.header("🛠️ Data Preprocessing Page")
 
     # Check if the dataset is available
     if data is not None and not data.empty:
-        st.write("Dataset:")
+        st.write("### 🗂️ Dataset Overview:")
         st.write(data)
-        st.write("Dataset Shape:")
-        st.write(data.shape)
+        st.write("**📏 Dataset Shape:**", data.shape)
 
-        st.subheader("Data Preprocessing Steps")
+        st.subheader("🔄 Data Preprocessing Steps")
 
-        # Step 1: Feature Scaling and Normalization (Limit to datasets with max size)
+        # Step 1: Feature Scaling and Normalization
         if data.shape[0] <= 5000 and data.shape[1] <= 50:
             st.subheader("Step 1: Feature Scaling and Normalization")
 
             numerical_cols = data.select_dtypes(include=[np.number]).columns
 
             if not numerical_cols.empty:
-                selected_scaling = st.radio("Select Feature Scaling or Normalization Method:", ["Min-Max Scaling", "Standardization"])
+                selected_scaling = st.radio("📊 Select Feature Scaling or Normalization Method:", ["Min-Max Scaling", "Standardization"])
 
                 if selected_scaling == "Min-Max Scaling":
-                    # Apply Min-Max Scaling
                     scaler = MinMaxScaler()
                     data[numerical_cols] = scaler.fit_transform(data[numerical_cols])
-                    st.write("Applied Min-Max Scaling:")
+                    st.success("✅ Applied Min-Max Scaling:")
                     st.write(data)
 
-                    if st.button("Download Data after Min-Max Scaling"):
-                        cleaned_data = data
-                        csv = cleaned_data.to_csv(index=False)
-                        b64 = base64.b64encode(csv.encode()).decode()  # Convert to base64
-                        href = f'<a href="data:file/csv;base64,{b64}" download="cleaned_data_scaled.csv">Click here to download Data after Min-Max Scaling</a>'
-                        st.markdown(href, unsafe_allow_html=True)
+                    st.download_button(
+                        label="💾 Download Scaled Data (Min-Max Scaling)",
+                        data=data.to_csv(index=False).encode(),
+                        file_name="scaled_data_minmax.csv",
+                        mime="text/csv"
+                    )
 
                 elif selected_scaling == "Standardization":
-                    # Apply Standardization
                     scaler = StandardScaler()
                     data[numerical_cols] = scaler.fit_transform(data[numerical_cols])
-                    st.write("Applied Standardization:")
+                    st.success("✅ Applied Standardization:")
                     st.write(data)
 
-                    if st.button("Download Data after Standardization"):
-                        cleaned_data = data
-                        csv = cleaned_data.to_csv(index=False)
-                        b64 = base64.b64encode(csv.encode()).decode()  # Convert to base64
-                        href = f'<a href="data:file/csv;base64,{b64}" download="cleaned_data_standardized.csv">Click here to download Data after Standardization</a>'
-                        st.markdown(href, unsafe_allow_html=True)
-                        
+                    st.download_button(
+                        label="💾 Download Standardized Data",
+                        data=data.to_csv(index=False).encode(),
+                        file_name="standardized_data.csv",
+                        mime="text/csv"
+                    )
             else:
-                st.warning("No numerical columns found in the dataset for scaling.")
+                st.warning("⚠️ No numerical columns found for scaling or normalization.")
         else:
-            st.warning("Feature Scaling and Normalization is limited to datasets with a maximum of 5000 rows and 50 columns.")
+            st.warning("⚠️ Feature Scaling and Normalization is limited to datasets with a maximum of 5000 rows and 50 columns.")
 
-        # Step 2: Data Splitting (Train-Test Split)
+        # Step 2: Data Splitting
         st.subheader("Step 2: Data Splitting (Train-Test Split)")
-        test_size = st.slider("Select the Test Data Proportion:", 0.1, 0.5, step=0.05)
+        test_size = st.slider("📊 Select Test Data Proportion:", 0.1, 0.5, step=0.05)
 
-        if test_size > 0:
-            target_variable = st.selectbox("Select the Target Variable (y):", data.columns)
-            other_variables = st.multiselect("Select Other Variables (X):", [col for col in data.columns if col != target_variable])
+        target_variable = st.selectbox("🎯 Select Target Variable (y):", data.columns)
+        other_variables = st.multiselect("📋 Select Other Variables (X):", [col for col in data.columns if col != target_variable])
 
-            if target_variable and other_variables:
-                X = data[other_variables]
-                y = data[target_variable]
+        if target_variable and other_variables:
+            X = data[other_variables]
+            y = data[target_variable]
 
-                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
-                st.write(f"Performed Train-Test Split with test size {test_size:.2f}")
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+            st.success(f"✅ Performed Train-Test Split (Test Size: {test_size:.2f})")
 
-                if st.button("Download Training Data"):
-                    training_data = pd.concat([X_train, y_train], axis=1)
-                    csv = training_data.to_csv(index=False)
-                    b64 = base64.b64encode(csv.encode()).decode()  # Convert to base64
-                    href = f'<a href="data:file/csv;base64,{b64}" download="training_data.csv">Click here to download Training Data</a>'
-                    st.markdown(href, unsafe_allow_html=True)
+            st.download_button(
+                label="💾 Download Training Data",
+                data=pd.concat([X_train, y_train], axis=1).to_csv(index=False).encode(),
+                file_name="training_data.csv",
+                mime="text/csv"
+            )
 
-                if st.button("Download Testing Data"):
-                    testing_data = pd.concat([X_test, y_test], axis=1)
-                    csv = testing_data.to_csv(index=False)
-                    b64 = base64.b64encode(csv.encode()).decode()  # Convert to base64
-                    href = f'<a href="data:file/csv;base64,{b64}" download="testing_data.csv">Click here to download Testing Data</a>'
-                    st.markdown(href, unsafe_allow_html=True)
-            else:
-                st.error("Please select a valid target variable and at least one other variable.")
+            st.download_button(
+                label="💾 Download Testing Data",
+                data=pd.concat([X_test, y_test], axis=1).to_csv(index=False).encode(),
+                file_name="testing_data.csv",
+                mime="text/csv"
+            )
         else:
-            st.error("Invalid test size. Please select a test size greater than 0.")
+            st.error("❌ Please select a target variable and at least one other variable for the split.")
 
-        # Step 3: Outlier Detection and Handling (Limit to datasets with max size)
+        # Step 3: Outlier Detection and Handling
         if data.shape[0] <= 5000 and data.shape[1] <= 50:
             st.subheader("Step 3: Outlier Detection and Handling")
 
-            outlier_methods = ["Z-Score", "IQR"]
-            selected_outlier_method = st.radio("Select Outlier Detection Method:", outlier_methods)
-
             numerical_cols = data.select_dtypes(include=[np.number]).columns
+            selected_outlier_method = st.radio("📊 Select Outlier Detection Method:", ["Z-Score", "IQR"])
 
             if not numerical_cols.empty:
-                selected_x_column = st.selectbox("Select X Column for Outlier Detection:", numerical_cols)
-                selected_y_column = st.selectbox("Select Y Column for Outlier Detection:", numerical_cols)
+                selected_column = st.selectbox("📋 Select Column for Outlier Detection:", numerical_cols)
 
                 if selected_outlier_method == "Z-Score":
-                    # Apply Z-Score method for outlier detection
-                    z_scores = zscore(data[selected_x_column])
+                    z_scores = zscore(data[selected_column])
                     outlier_indices = np.where(np.abs(z_scores) > 3)
                     data_no_outliers = data.drop(outlier_indices[0])
-                    st.write("Applied Z-Score Outlier Detection and Handling")
-                    st.write("Dataset after Z-Score Outlier Handling:")
+                    st.success("✅ Applied Z-Score Outlier Detection")
                     st.write(data_no_outliers)
 
-                    if st.button("Download Data after Z-Score Handling"):
-                        cleaned_data = data_no_outliers
-                        csv = cleaned_data.to_csv(index=False)
-                        b64 = base64.b64encode(csv.encode()).decode()  # Convert to base64
-                        href = f'<a href="data:file/csv;base64,{b64}" download="cleaned_data_zscore.csv">Click here to download Data after Z-Score Handling</a>'
-                        st.markdown(href, unsafe_allow_html=True)
+                    st.download_button(
+                        label="💾 Download Data after Z-Score Handling",
+                        data=data_no_outliers.to_csv(index=False).encode(),
+                        file_name="cleaned_data_zscore.csv",
+                        mime="text/csv"
+                    )
 
                 elif selected_outlier_method == "IQR":
-                    # Apply IQR method for outlier detection
-                    Q1 = data[selected_x_column].quantile(0.25)
-                    Q3 = data[selected_x_column].quantile(0.75)
+                    Q1 = data[selected_column].quantile(0.25)
+                    Q3 = data[selected_column].quantile(0.75)
                     IQR = Q3 - Q1
                     lower_bound = Q1 - 1.5 * IQR
                     upper_bound = Q3 + 1.5 * IQR
 
-                    outlier_indices = ((data[selected_x_column] < lower_bound) | (data[selected_x_column] > upper_bound))
+                    outlier_indices = ((data[selected_column] < lower_bound) | (data[selected_column] > upper_bound))
                     data_no_outliers = data[~outlier_indices]
-                    st.write("Applied IQR Outlier Detection and Handling")
-                    st.write("Dataset after IQR Outlier Handling:")
+                    st.success("✅ Applied IQR Outlier Detection")
                     st.write(data_no_outliers)
 
-                    if st.button("Download Data after IQR Handling"):
-                        cleaned_data = data_no_outliers
-                        csv = cleaned_data.to_csv(index=False)
-                        b64 = base64.b64encode(csv.encode()).decode()  # Convert to base64
-                        href = f'<a href="data:file/csv;base64,{b64}" download="cleaned_data_iqr.csv">Click here to download Data after IQR Handling</a>'
-                        st.markdown(href, unsafe_allow_html=True)
-
+                    st.download_button(
+                        label="💾 Download Data after IQR Handling",
+                        data=data_no_outliers.to_csv(index=False).encode(),
+                        file_name="cleaned_data_iqr.csv",
+                        mime="text/csv"
+                    )
             else:
-                st.warning("No numerical columns found in the dataset for outlier detection.")
+                st.warning("⚠️ No numerical columns available for outlier detection.")
         else:
-            st.warning("Outlier Detection and Handling is limited to datasets with a maximum of 5000 rows and 50 columns.")
+            st.warning("⚠️ Outlier Detection and Handling is limited to datasets with a maximum of 5000 rows and 50 columns.")
 
     else:
-        st.warning("Please upload a dataset in the 'Data Preprocessing' step to continue.")
+        st.warning("🚨 Please upload a dataset to proceed with preprocessing.")
 
 # Data Cleaning Page
 elif page == "Data Cleaning":
@@ -1027,12 +1014,3 @@ elif page == "Model Evaluation":
                     st.error("An error occurred while selecting the model. Please try again.")
     else:
         st.warning("Please upload a dataset in the 'Data Cleaning' step to continue.")
-
-# Handle errors and optimize performance
-try:
-    if data is not None:
-        st.write("Data Loaded Successfully")
-    else:
-        st.write("Data Not Loaded. Please upload a dataset.")
-except Exception as e:
-    st.error(f"An error occurred: {e}")
