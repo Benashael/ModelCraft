@@ -64,7 +64,6 @@ page = st.sidebar.radio("**Select a Page 📄**", [
     "📈 Model Evaluation"
 ])
 
-
 # Introduction Page
 if page == "🏠 Home Page":
 
@@ -167,7 +166,7 @@ if page == "🏠 Home Page":
 
 # Data Profiling Page
 elif page == "📋 Data Profiling":
-    st.header("📋 Data Profiling Page")
+    st.header("📋 Data Profiling")
 
     if data is not None and not data.empty:
         st.write("### 🔍 Dataset Overview")
@@ -228,7 +227,7 @@ elif page == "📋 Data Profiling":
 
 # Data Encoding Page
 elif page == "🔑 Data Encoding":
-    st.header("🔑 Data Encoding Page")
+    st.header("🔑 Data Encoding")
     if data is not None:
         st.write("### 🗂️ Dataset Overview:")
         st.write(data)
@@ -285,7 +284,7 @@ elif page == "🔑 Data Encoding":
 
 # Data Preprocessing Page
 elif page == "🛠️ Data Preprocessing":
-    st.header("🛠️ Data Preprocessing Page")
+    st.header("🛠️ Data Preprocessing")
 
     # Check if the dataset is available
     if data is not None and not data.empty:
@@ -415,20 +414,20 @@ elif page == "🛠️ Data Preprocessing":
         st.warning("🚨 Please upload a dataset to proceed with preprocessing.")
 
 # Data Cleaning Page
-elif page == "Data Cleaning":
-    st.title("Data Cleaning Page")
+elif page == "🧹 Data Cleaning":
+    st.header("🧹 Data Cleaning")
 
     # Check if the dataset is available
     if data is not None:
-        st.write("Dataset:")
+        st.write("📊 **Dataset:**")
         st.write(data)
-        st.write("Dataset Shape:")
+        st.write("📏 **Dataset Shape:**")
         st.write(data.shape)
 
         # Option to Show Summary Statistics
-        show_summary = st.checkbox("Show Summary Statistics")
+        show_summary = st.checkbox("📈 Show Summary Statistics")
         if show_summary:
-            st.subheader("Summary Statistics")
+            st.subheader("📊 Summary Statistics")
             st.write(data.describe())
 
         # Check if the dataset has too many rows or columns
@@ -436,95 +435,102 @@ elif page == "Data Cleaning":
         max_columns_for_cleaning = 50
 
         if data.shape[0] > max_rows_for_cleaning or data.shape[1] > max_columns_for_cleaning:
-            st.warning(f"Note: The dataset size exceeds the maximum allowed for data cleaning (max rows: {max_rows_for_cleaning}, max columns: {max_columns_for_cleaning}).")
+            st.warning(f"⚠️ **Note:** The dataset size exceeds the maximum allowed for data cleaning (max rows: {max_rows_for_cleaning}, max columns: {max_columns_for_cleaning}).")
         else:
             # Check if there are categorical features
             categorical_features = data.select_dtypes(include=['object']).columns.tolist()
 
             if not categorical_features:
-                st.warning("Note: The dataset has no categorical features, so you can use the 'mean' or 'median' methods.")
+                st.warning("ℹ️ **Note:** The dataset has no categorical features, so you can use the 'Mean' or 'Median' methods.")
             else:
-                st.write("Categorical Features:")
+                st.write("🗂️ **Categorical Features:**")
                 st.write(categorical_features)
 
             # Choose missing value handling method
-            st.subheader("Missing Value Handling")
-            methods = ["Drop Missing Values", "Custom Value"]
+            st.subheader("🛠️ Missing Value Handling")
+            methods = ["🚮 Drop Missing Values", "✏️ Custom Value"]
             if not categorical_features:
-                methods.extend(["Mean", "Median"])
+                methods.extend(["📊 Mean", "📉 Median"])
 
-            method = st.selectbox("Select a method:", methods)
+            method = st.selectbox("🔧 Select a method:", methods)
 
-            if method == "Drop Missing Values":
+            if method == "🚮 Drop Missing Values":
                 data_cleaned = data.dropna()
-                st.write("Dropped missing values.")
+                st.write("✅ **Dropped missing values.**")
                 st.write(data_cleaned)
 
-            elif method == "Custom Value":
-                custom_value = st.text_input("Enter a custom value to fill missing cells:", "0")
+            elif method == "✏️ Custom Value":
+                custom_value = st.text_input("🔤 Enter a custom value to fill missing cells:", "0")
                 data_cleaned = data.fillna(custom_value)
-                st.write(f"Filled missing values with custom value: {custom_value}")
+                st.write(f"✅ **Filled missing values with custom value:** {custom_value}")
                 st.write(data_cleaned)
 
-            elif (method == "Mean" or method == "Median") and not categorical_features:
-                if method == "Mean":
+            elif (method == "📊 Mean" or method == "📉 Median") and not categorical_features:
+                if method == "📊 Mean":
                     data_cleaned = data.fillna(data.mean())
-                    st.write("Filled missing values with mean.")
+                    st.write("✅ **Filled missing values with mean.**")
                     st.write(data_cleaned)
-                else:  # method == "Median"
+                else:  # method == "📉 Median"
                     data_cleaned = data.fillna(data.median())
-                    st.write("Filled missing values with median.")
+                    st.write("✅ **Filled missing values with median.**")
                     st.write(data_cleaned)
             else:
-                st.warning(f"{method} method not available due to the presence of categorical features. Use 'Drop Missing Values' or 'Custom Value' instead.")
+                st.warning(f"⚠️ {method} method not available due to the presence of categorical features. Use '🚮 Drop Missing Values' or '✏️ Custom Value' instead.")
 
         # Allow users to download the cleaned dataset
-        if st.button("Download Cleaned Dataset"):
+        if st.button("💾 Download Cleaned Dataset"):
             cleaned_csv = data_cleaned.to_csv(index=False)
             cleaned_csv = cleaned_csv.encode()
             st.download_button(
-                label="Click here to download cleaned dataset as CSV",
+                label="📥 Click here to download cleaned dataset as CSV",
                 data=cleaned_csv,
                 key="cleaned_data.csv",
                 file_name="cleaned_data.csv"
             )
     else:
-        st.warning("Please upload a dataset in the 'Data Cleaning' step to continue.")
+        st.warning("⚠️ **Please upload a dataset in the 'Data Cleaning' step to continue.**")
 
 # Data Visualization Page
-elif page == "Data Visualization":
-    st.title("Data Visualization Page")
+elif page == "📊 Data Visualization":
+    st.header("📊 Data Visualization")
+
     if data is not None:
         # Filter out only numerical columns
         numerical_columns = data.select_dtypes(include=['int64', 'float64'])
         
         if not numerical_columns.empty:
-            st.write("Dataset:")
+            st.write("📊 **Dataset:**")
             st.write(data)
 
-            st.subheader("Data Visualization")
-            st.write("Select Columns for Visualization:")
-            columns_to_visualize = st.multiselect("Select Columns", numerical_columns.columns)
+            st.subheader("📈 Data Visualization")
+            st.write("🔍 **Select Columns for Visualization:**")
+            columns_to_visualize = st.multiselect("📋 Select Columns", numerical_columns.columns)
+            
             if columns_to_visualize:
+                st.write("📉 **Line Chart:**")
                 st.line_chart(data[columns_to_visualize])
+
+                st.write("📊 **Bar Chart:**")
                 st.bar_chart(data[columns_to_visualize])
+
+                st.write("🌊 **Area Chart:**")
                 st.area_chart(data[columns_to_visualize])
         else:
-            st.warning("No numerical columns found in the dataset. Please upload a dataset with numerical data to continue.")
+            st.warning("⚠️ **No numerical columns found in the dataset. Please upload a dataset with numerical data to continue.**")
     else:
-        st.warning("Please upload a dataset to continue.")
+        st.warning("⚠️ **Please upload a dataset to continue.**")
         
 # Feature Selection Page
-elif page == "Feature Selection":
-    st.title("Feature Selection Page")
+elif page == "🎯 Feature Selection":
+    st.header("🎯 Feature Selection")
 
     # Check if the dataset is available and within size limits
     if data is not None and not data.empty:
         if data.shape[0] <= 5000 and data.shape[1] <= 50:
-            st.write("Dataset Overview")
+            st.subheader("📊 Dataset Overview")
 
             # Dataset Shape
-            st.write("Dataset Shape:", data.shape)
+            st.write("📏 **Dataset Shape:**", data.shape)
 
             # Check for categorical features
             categorical_features = data.select_dtypes(include=['object']).columns.tolist()
@@ -534,15 +540,16 @@ elif page == "Feature Selection":
                 features = data.columns
 
                 # Select Features for Analysis
-                selected_features = st.multiselect("Select Features for Analysis", features)
+                st.write("🔍 **Select Features for Analysis:**")
+                selected_features = st.multiselect("📋 Choose Features", features)
 
                 if len(selected_features) > 0:
                     # Display selected features
-                    st.subheader("Selected Features:")
+                    st.subheader("✅ Selected Features")
                     st.write(selected_features)
 
                     # Target Variable Selection
-                    target_variable = st.selectbox("Select the Target Variable", features)
+                    target_variable = st.selectbox("🎯 Select the Target Variable", features)
 
                     # Split data into X and y
                     X = data[selected_features]
@@ -562,7 +569,7 @@ elif page == "Feature Selection":
                         "Score": feature_scores,
                         "Ranking": feature_rankings
                     })
-                    st.subheader("Feature Scores and Rankings")
+                    st.subheader("📈 Feature Scores and Rankings")
                     st.write(feature_info.sort_values(by="Ranking"))
 
                     # Perform a simple regression using the top-ranked feature
@@ -576,37 +583,36 @@ elif page == "Feature Selection":
                     # Calculate Mean Squared Error as a metric
                     mse = mean_squared_error(y_test, y_pred)
 
-                    st.subheader("Regression using Top-Ranked Feature")
-                    st.write(f"Top-Ranked Feature: {top_feature}")
-                    st.write(f"Mean Squared Error (MSE): {mse:.2f}")
-
+                    st.subheader("📉 Regression using Top-Ranked Feature")
+                    st.write(f"🏆 **Top-Ranked Feature:** {top_feature}")
+                    st.write(f"📉 **Mean Squared Error (MSE):** {mse:.2f}")
                 else:
-                    st.warning("Please select at least one feature for analysis.")
+                    st.warning("⚠️ **Please select at least one feature for analysis.**")
             else:
-                st.error("The dataset contains categorical features and is not suitable for feature selection.")
+                st.error("🚫 **The dataset contains categorical features and is not suitable for feature selection.**")
         else:
-            st.warning("The dataset exceeds the size limits for this page (max rows: 5000, max columns: 50).")
+            st.warning("⚠️ **The dataset exceeds the size limits for this page (max rows: 5000, max columns: 50).**")
     else:
-        st.error("Please upload a valid dataset in the 'Feature Selection' step to continue.")
+        st.error("❌ **Please upload a valid dataset in the 'Feature Selection' step to continue.**")
 
 # Hyperparameter Tuning Page
-elif page == "Hyperparameter Tuning":
-    st.title("Hyperparameter Tuning Page")
+elif page == "⚙️ Hyperparameter Tuning":
+    st.header("⚙️ Hyperparameter Tuning")
 
     # Check if the dataset and model are available
     if data is not None and not data.empty:
+        st.subheader("📊 Dataset Overview")
         st.write("Dataset:")
         st.write(data)
-        st.write("Dataset Shape:")
-        st.write(data.shape)
+        st.write("📏 **Dataset Shape:**", data.shape)
 
         # Check if the selected dataset has categorical features
         categorical_cols = data.select_dtypes(include=["object"]).columns
         if not categorical_cols.empty:
-            st.error("Hyperparameter tuning is not supported for datasets with categorical features. Please preprocess your data first.")
+            st.error("🚫 Hyperparameter tuning is not supported for datasets with categorical features. Please preprocess your data first.")
         else:
-            st.write("Machine Learning Model:")
-            selected_model = st.selectbox("Select a Machine Learning Model", ["Logistic Regression (Classification)", "Ridge Regression (Regression)"])
+            st.subheader("🤖 Select Machine Learning Model")
+            selected_model = st.selectbox("🔍 Choose a Model", ["Logistic Regression (Classification)", "Ridge Regression (Regression)"])
             # Add more machine learning models as needed
 
             model = None
@@ -615,40 +621,40 @@ elif page == "Hyperparameter Tuning":
             if selected_model == "Logistic Regression (Classification)":
                 model = LogisticRegression()
                 hyperparameters = {
-                    "C": st.slider("Inverse of Regularization Strength (C)", 0.001, 10.0),
-                    "max_iter": st.slider("Maximum Iterations (max_iter)", 100, 1000, step=100),
+                    "C": st.slider("📏 Inverse of Regularization Strength (C)", 0.001, 10.0),
+                    "max_iter": st.slider("🔄 Maximum Iterations (max_iter)", 100, 1000, step=100),
                 }
 
             elif selected_model == "Ridge Regression (Regression)":
                 model = Ridge()
                 hyperparameters = {
-                    "alpha": st.slider("Alpha (Regularization Strength)", 0.001, 10.0),
-                    "fit_intercept": st.checkbox("Fit Intercept", value=True),
-                    "max_iter": st.slider("Maximum Number of Iterations", 100, 1000, step=100),
+                    "alpha": st.slider("🛠️ Alpha (Regularization Strength)", 0.001, 10.0),
+                    "fit_intercept": st.checkbox("✅ Fit Intercept", value=True),
+                    "max_iter": st.slider("🔄 Maximum Number of Iterations", 100, 1000, step=100),
                 }
 
             # Add hyperparameters for other models as needed
 
             if model is not None:
-                st.subheader("Hyperparameter Tuning")
+                st.subheader("🎯 Hyperparameter Tuning")
 
                 # Display the selected hyperparameters
-                st.write("Selected Hyperparameters:")
+                st.write("⚙️ **Selected Hyperparameters:**")
                 st.write(hyperparameters)
 
                 try:
                     # Prompt the user to select target variable and other variables
-                    st.subheader("Select Target Variable and Other Variables")
+                    st.subheader("📌 Select Target Variable and Other Variables")
 
-                    target_variable = st.selectbox("Select the Target Variable (y)", data.columns)
-                    other_variables = st.multiselect("Select Other Variables (X)", [col for col in data.columns if col != target_variable])
+                    target_variable = st.selectbox("🎯 Select the Target Variable (y)", data.columns)
+                    other_variables = st.multiselect("📋 Select Other Variables (X)", [col for col in data.columns if col != target_variable])
 
                     if other_variables and target_variable:
                         X_train = data[other_variables]
                         y_train = data[target_variable]
 
                         # Perform hyperparameter tuning using RandomizedSearchCV
-
+                        st.write("⏳ **Tuning Hyperparameters...**")
                         param_dist = {}
                         for param_name, param_value in hyperparameters.items():
                             if isinstance(param_value, float):
@@ -656,17 +662,23 @@ elif page == "Hyperparameter Tuning":
                             else:
                                 param_dist[param_name] = list(range(param_value))
 
-                        randomized_search = RandomizedSearchCV(model, param_distributions=param_dist, n_iter=10, cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42), n_jobs=-1)
+                        randomized_search = RandomizedSearchCV(
+                            model, 
+                            param_distributions=param_dist, 
+                            n_iter=10, 
+                            cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42), 
+                            n_jobs=-1
+                        )
                         randomized_search.fit(X_train, y_train)
 
                         best_hyperparameters = randomized_search.best_params_
 
                         # Display the best hyperparameters and their performance
-                        st.subheader("Best Hyperparameters")
+                        st.subheader("🏆 Best Hyperparameters")
                         st.write(best_hyperparameters)
 
                         # Display the model's performance with the best hyperparameters
-                        st.subheader("Model Performance with Best Hyperparameters")
+                        st.subheader("📈 Model Performance with Best Hyperparameters")
                         best_model = randomized_search.best_estimator_
 
                         # Split the data for evaluation
@@ -674,233 +686,288 @@ elif page == "Hyperparameter Tuning":
                         best_model.fit(X_train, y_train)
                         y_pred = best_model.predict(X_test)
                         accuracy = accuracy_score(y_test, y_pred)
-                        st.write(f"Accuracy with Best Hyperparameters: {accuracy:.2f}")
+                        st.write(f"✅ **Accuracy with Best Hyperparameters:** {accuracy:.2f}")
 
                     else:
-                        st.error("Please select a valid target variable and at least one other variable.")
+                        st.error("⚠️ Please select a valid target variable and at least one other variable.")
                 except Exception as e:
-                    st.error(f"An error occurred during hyperparameter tuning: {str(e)}")
+                    st.error(f"❌ **An error occurred during hyperparameter tuning:** {str(e)}")
             else:
-                st.error("An error occurred while selecting the model. Please try again.")
+                st.error("🚫 **An error occurred while selecting the model. Please try again.**")
     else:
-        st.warning("Please upload a dataset in the 'Data Cleaning' step to continue.")
+        st.warning("⚠️ **Please upload a dataset in the 'Data Cleaning' step to continue.**")
 
 # ML Model Selection Page
-elif page == "ML Model Selection":
-    st.title("ML Model Selection Page")
-    
-    # Define a function to check if a column contains categorical data
+elif page == "🤖 ML Model Selection":
+    st.header("🤖 ML Model Selection")
+
+    # Function to check for categorical columns
     def has_categorical_columns(data):
-        # Assuming that categorical columns are of data type 'object'
+        # Identifies if any column in the dataset is of type 'object' (categorical)
         return data.select_dtypes(include=['object']).empty
-    
-    # Check if the dataset is provided
+
+    # Check if a dataset is uploaded
     if data is not None:
-        # Check if the dataset has categorical columns
+        # Check for categorical columns
         if has_categorical_columns(data):
-            st.title("ML Model Selection Page")
-            st.write("Dataset:")
+            st.subheader("📊 Dataset Overview")
+            st.write("Dataset Preview:")
             st.write(data)
-            st.write("Dataset Shape:")
-            st.write(data.shape)
+            st.write("📏 Dataset Shape:", data.shape)
     
-            # Define the maximum allowed dataset size for ML model selection
-            max_rows_for_ml_selection = 5000
-            max_columns_for_ml_selection = 50
+            # Define dataset size constraints for ML model selection
+            max_rows = 5000
+            max_columns = 50
     
-            if data.shape[0] > max_rows_for_ml_selection or data.shape[1] > max_columns_for_ml_selection:
-                st.warning(f"Note: The dataset size exceeds the maximum allowed for ML model selection (max rows: {max_rows_for_ml_selection}, max columns: {max_columns_for_ml_selection}).")
+            if data.shape[0] > max_rows or data.shape[1] > max_columns:
+                st.warning(f"⚠️ The dataset exceeds the allowed size for ML model selection (Max Rows: {max_rows}, Max Columns: {max_columns}).")
             else:
-                st.subheader("Select Problem Type")
-                problem_type = st.radio("Select Problem Type", ["Classification", "Regression"])
+                st.subheader("🔍 Select Problem Type")
+                problem_type = st.radio("📌 Problem Type", ["Classification", "Regression"])
     
-                if problem_type == "Classification":
-                    st.write("Example: Recommend Classification Models using Scikit-learn")
+                # Prompt to select the target variable
+                target_variable = st.selectbox("🎯 Select Target Variable (y)", data.columns)
+    
+                # Identify feature columns
+                feature_columns = [col for col in data.columns if col != target_variable]
+                selected_features = st.multiselect("📋 Select Features (X)", feature_columns)
+    
+                if not selected_features:
+                    st.warning("⚠️ Please select one or more features (X) to proceed.")
                 else:
-                    st.write("Example: Recommend Regression Models using Scikit-learn")
+                    # Split data into features (X) and target (y)
+                    X = data[selected_features]
+                    y = data[target_variable]
     
-                target_variable = st.selectbox("Select Target Variable", data.columns)
+                    # Split data into training and test sets
+                    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
-                X_columns = [col for col in data.columns if col != target_variable]
-                selected_columns = st.multiselect("Select Features (X)", X_columns)
-    
-                if not selected_columns:
-                    st.warning("Please select one or more features (X) before running the ML model selection.")
-                else:
                     if problem_type == "Classification":
-                        X = data[selected_columns]
-                        y = data[target_variable]
-                        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-                        st.write("Classification Models:")
+                        st.subheader("🤖 Classification Models")
                         classification_models = [RandomForestClassifier(), LogisticRegression(), DecisionTreeClassifier()]
                         for model in classification_models:
                             model.fit(X_train, y_train)
                             y_pred = model.predict(X_test)
-                            st.write(f"Model: {type(model).__name__}")
-                            st.write(f"Accuracy Score: {accuracy_score(y_test, y_pred)}")
+                            accuracy = accuracy_score(y_test, y_pred)
+                            st.write(f"**Model:** {type(model).__name__}")
+                            st.write(f"✅ **Accuracy Score:** {accuracy:.2f}")
+    
                     elif problem_type == "Regression":
-                        X = data[selected_columns]
-                        y = data[target_variable]
-                        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-                        st.write("Regression Models:")
+                        st.subheader("📈 Regression Models")
                         regression_models = [RandomForestRegressor(), LinearRegression(), Ridge(), Lasso()]
                         for model in regression_models:
                             model.fit(X_train, y_train)
                             y_pred = model.predict(X_test)
-                            st.write(f"Model: {type(model).__name__}")
-                            st.write(f"Mean Squared Error: {mean_squared_error(y_test, y_pred)}")
+                            mse = mean_squared_error(y_test, y_pred)
+                            st.write(f"**Model:** {type(model).__name__}")
+                            st.write(f"📉 **Mean Squared Error:** {mse:.2f}")
         else:
-            st.warning("This page is not available for datasets with categorical columns.")
+            st.error("🚫 The page does not support datasets with categorical columns. Please preprocess your data.")
     else:
-        st.warning("Please upload a dataset to continue.")
+        st.warning("📂 Please upload a dataset to continue.")
 
 # AutoML for Classification Page
-elif page == "Classification (ML)":
-    st.title("Classification (ML)")
-    if data is not None:
-        st.write("Dataset:")
-        st.write(data)
-        st.write("Dataset Shape:")
-        st.write(data.shape)
+elif page == "📂 Classification (ML)":
+    st.header("📂 Classification (ML)")
 
-        # Check if the dataset has any categorical columns
+    if data is not None:
+        st.subheader("📊 Dataset Overview")
+        st.write("Dataset Preview:")
+        st.write(data)
+        st.write("📏 Dataset Shape:", data.shape)
+
+        # Check if the dataset contains categorical columns
         has_categorical_columns = data.select_dtypes(include=['object']).empty
 
         if has_categorical_columns:
-            st.subheader("AutoML for Classification")
+            st.subheader("🤖 AutoML for Classification")
+            
+            # Define maximum dataset size constraints
+            max_rows = 5000
+            max_columns = 50
 
-            # Define the maximum allowed dataset size for classification
-            max_rows_for_classification = 5000
-            max_columns_for_classification = 50
-
-            if data.shape[0] > max_rows_for_classification or data.shape[1] > max_columns_for_classification:
-                st.error(f"Dataset size exceeds the maximum allowed for classification (max rows: {max_rows_for_classification}, max columns: {max_columns_for_classification}).")
+            if data.shape[0] > max_rows or data.shape[1] > max_columns:
+                st.error(f"⚠️ Dataset size exceeds the allowed limit for classification (Max Rows: {max_rows}, Max Columns: {max_columns}).")
             else:
-                target_variable = st.selectbox("Select Target Variable (Y)", data.columns)
-                st.write("Select X Variables:")
-                X_variables = st.multiselect("Select Features (X)", [col for col in data.columns if col != target_variable])
+                # Target variable selection
+                target_variable = st.selectbox("🎯 Select Target Variable (Y)", data.columns)
+
+                # Feature selection
+                X_variables = st.multiselect("📋 Select Features (X)", [col for col in data.columns if col != target_variable])
 
                 if not X_variables:
-                    st.warning("Please select one or more features (X) before running the AutoML for classification.")
+                    st.warning("⚠️ Please select one or more features (X) to proceed.")
                 else:
-                    test_size = st.slider("Select Test Size (Fraction)", 0.1, 0.5, 0.2, 0.01)
-                    random_state = st.slider("Select Random State", 1, 100, 42, 1)
+                    # Test size and random state sliders
+                    test_size = st.slider("📐 Select Test Size (Fraction)", min_value=0.1, max_value=0.5, value=0.2, step=0.01)
+                    random_state = st.slider("🎲 Select Random State", min_value=1, max_value=100, value=42, step=1)
 
+                    # Splitting the dataset
                     X = data[X_variables]
                     Y = data[target_variable]
-
                     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size, random_state=random_state)
 
-                    st.write("Classification Models:")
-                    classification_models = [RandomForestClassifier(), LogisticRegression(), DecisionTreeClassifier()]
+                    st.subheader("📈 Classification Models and Results")
+                    classification_models = [
+                        RandomForestClassifier(),
+                        LogisticRegression(max_iter=1000),  # Increased iterations for better convergence
+                        DecisionTreeClassifier()
+                    ]
+
+                    # Loop through each model and display results
                     for model in classification_models:
                         model.fit(X_train, Y_train)
                         Y_pred = model.predict(X_test)
-                        st.write(f"Model: {type(model).__name__}")
-                        st.write(f"Accuracy Score: {accuracy_score(Y_test, Y_pred)}")
+                        accuracy = accuracy_score(Y_test, Y_pred)
+
+                        st.write(f"**Model:** {type(model).__name__}")
+                        st.write(f"✅ **Accuracy Score:** {accuracy:.2f}")
         else:
-            st.warning("This page is only available for datasets without categorical columns.")
+            st.warning("🚫 This page is only available for datasets without categorical columns. Please preprocess your data.")
     else:
-        st.warning("Please upload a dataset to continue.")
+        st.warning("📂 Please upload a dataset to continue.")
 
 # AutoML for Regression Page 
-elif page == "Regression (ML)":
-    st.title("Regression (ML)")
-    if data is not None:
-        st.write("Dataset:")
-        st.write(data)
-        st.write("Dataset Shape:")
-        st.write(data.shape)
+elif page == "📉 Regression (ML)":
+    st.header("📉 Regression (ML)")
 
-        # Check if the dataset contains any categorical columns
+    if data is not None:
+        st.subheader("📊 Dataset Overview")
+        st.write("Dataset Preview:")
+        st.write(data)
+        st.write("📏 Dataset Shape:", data.shape)
+
+        # Check if the dataset contains categorical columns
         has_categorical_columns = data.select_dtypes(include=['object']).shape[1] > 0
 
         if has_categorical_columns:
-            st.error("AutoML for Regression is enabled only for datasets without categorical columns.")
+            st.error("🚫 AutoML for Regression is enabled only for datasets without categorical columns. Please preprocess your data.")
         else:
-            st.subheader("AutoML for Regression")
+            st.subheader("🤖 AutoML for Regression")
 
             # Define the maximum allowed dataset size for regression
-            max_rows_for_regression = 5000
-            max_columns_for_regression = 50
+            max_rows = 5000
+            max_columns = 50
 
-            if data.shape[0] > max_rows_for_regression or data.shape[1] > max_columns_for_regression:
-                st.error(f"Dataset size exceeds the maximum allowed for regression (max rows: {max_rows_for_regression}, max columns: {max_columns_for_regression}).")
+            if data.shape[0] > max_rows or data.shape[1] > max_columns:
+                st.error(f"⚠️ Dataset size exceeds the maximum allowed for regression (Max Rows: {max_rows}, Max Columns: {max_columns}).")
             else:
-                target_variable = st.selectbox("Select Target Variable (Y)", data.columns)
-                st.write("Select X Variables:")
-                X_variables = st.multiselect("Select Features (X)", [col for col in data.columns if col != target_variable])
+                # Target variable selection
+                target_variable = st.selectbox("🎯 Select Target Variable (Y)", data.columns)
+
+                # Feature selection
+                X_variables = st.multiselect("📋 Select Features (X)", [col for col in data.columns if col != target_variable])
 
                 if not X_variables:
-                    st.warning("Please select one or more features (X) before running the AutoML for regression.")
+                    st.warning("⚠️ Please select one or more features (X) to proceed.")
                 else:
-                    test_size = st.slider("Select Test Size (Fraction)", 0.1, 0.5, 0.2, 0.01)
-                    random_state = st.slider("Select Random State", 1, 100, 42, 1)
+                    # Test size and random state sliders
+                    test_size = st.slider("📐 Select Test Size (Fraction)", min_value=0.1, max_value=0.5, value=0.2, step=0.01)
+                    random_state = st.slider("🎲 Select Random State", min_value=1, max_value=100, value=42, step=1)
 
+                    # Splitting the dataset
                     X = data[X_variables]
                     Y = data[target_variable]
-
                     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size, random_state=random_state)
 
-                    st.write("Regression Models:")
-                    regression_models = [RandomForestRegressor(), LinearRegression(), Ridge(), Lasso()]
+                    st.subheader("📈 Regression Models and Results")
+                    regression_models = [
+                        RandomForestRegressor(),
+                        LinearRegression(),
+                        Ridge(),
+                        Lasso()
+                    ]
+
+                    # Loop through each model and display results
                     for model in regression_models:
                         model.fit(X_train, Y_train)
                         Y_pred = model.predict(X_test)
-                        st.write(f"Model: {type(model).__name__}")
-                        st.write(f"Mean Squared Error: {mean_squared_error(Y_test, Y_pred)}")
+                        mse = mean_squared_error(Y_test, Y_pred)
+
+                        st.write(f"**Model:** {type(model).__name__}")
+                        st.write(f"📉 **Mean Squared Error:** {mse:.2f}")
+
+                        # Display additional regression metrics if needed
+                        st.write(f"📏 **R2 Score:** {model.score(X_test, Y_test):.2f}")
+                        
+                        if hasattr(model, 'feature_importances_'):
+                            st.write("🔍 **Feature Importances:**")
+                            feature_importances = pd.DataFrame({
+                                'Feature': X_variables,
+                                'Importance': model.feature_importances_
+                            })
+                            feature_importances = feature_importances.sort_values(by='Importance', ascending=False)
+                            st.write(feature_importances)
+        else:
+            st.warning("🚫 This page is only available for datasets without categorical columns.")
     else:
-        st.warning("Please upload a dataset to continue.")
+        st.warning("📂 Please upload a dataset to continue.")
         
 # AutoML for Clustering Page
-elif page == "Clustering (ML)":
-    st.title("Clustering (ML)")
+elif page == "🔍 Clustering (ML)":
+    st.header("🔍 Clustering (ML)")
 
     # Check if the dataset is available
     if data is not None:
-        st.write("Dataset:")
+        st.subheader("📊 Dataset Overview")
+        st.write("Dataset Preview:")
         st.write(data)
-        st.write("Dataset Shape:")
-        st.write(data.shape)
+        st.write("📏 Dataset Shape:", data.shape)
 
         # Define the maximum allowed dataset size for clustering
         max_rows_for_clustering = 2000
         max_columns_for_clustering = 25
 
         if data.shape[0] > max_rows_for_clustering or data.shape[1] > max_columns_for_clustering:
-            st.error(f"Dataset size exceeds the maximum allowed for clustering (max rows: {max_rows_for_clustering}, max columns: {max_columns_for_clustering}).")
+            st.error(f"⚠️ Dataset size exceeds the maximum allowed for clustering (max rows: {max_rows_for_clustering}, max columns: {max_columns_for_clustering}).")
         else:
-            num_clusters = st.slider("Select the number of clusters:", 2, 10)
+            # Select the number of clusters
+            num_clusters = st.slider("🧩 Select the Number of Clusters:", 2, 10)
 
+            # Remove rows with missing values
             X = data.dropna()
 
             if X.shape[0] < num_clusters:
-                st.error("Not enough data points for the selected number of clusters.")
+                st.error("⚠️ Not enough data points for the selected number of clusters.")
             else:
-                # Perform one-hot encoding for categorical features
+                # One-hot encoding for categorical features
                 categorical_features = X.select_dtypes(include=['object']).columns.tolist()
                 if categorical_features:
+                    st.write(f"🎯 Categorical features detected: {', '.join(categorical_features)}")
                     X_encoded = pd.get_dummies(X, columns=categorical_features)
                 else:
                     X_encoded = X
 
+                # Perform KMeans clustering
                 kmeans = KMeans(n_clusters=num_clusters, random_state=42)
                 X_encoded['Cluster'] = kmeans.fit_predict(X_encoded)
 
-                # Download the dataset with added clusters column
+                # Provide download link for the dataset with clusters
                 csv_data_encoded = X_encoded.to_csv(index=False)
                 b64 = base64.b64encode(csv_data_encoded.encode()).decode()
-                href = f'<a href="data:file/csv;base64,{b64}" download="clustered_data.csv">Click here to download Clustered Dataset</a>'
+                href = f'<a href="data:file/csv;base64,{b64}" download="clustered_data.csv">📥 Download Clustered Dataset</a>'
                 st.markdown(href, unsafe_allow_html=True)
 
-                st.write(f"Performed K-Means clustering with {num_clusters} clusters.")
+                # Display the clustering result
+                st.write(f"🔍 Performed K-Means clustering with {num_clusters} clusters.")
+                st.write("📊 Clustered Data Preview:")
                 st.write(X_encoded)
+
+                # Visualize clusters if possible
+                if X_encoded.shape[1] >= 2:
+                    st.subheader("📈 Clustering Visualization")
+                    st.write("Visualizing the first two features for clustering.")
+                    fig, ax = plt.subplots()
+                    ax.scatter(X_encoded.iloc[:, 0], X_encoded.iloc[:, 1], c=X_encoded['Cluster'], cmap='viridis')
+                    ax.set_xlabel(X_encoded.columns[0])
+                    ax.set_ylabel(X_encoded.columns[1])
+                    st.pyplot(fig)
     else:
-        st.warning("Please upload a dataset in the 'AutoML for Clustering' step to continue.")
+        st.warning("📂 Please upload a dataset in the 'AutoML for Clustering' step to continue.")
 
 # Model Evaluation Page
-elif page == "Model Evaluation":
-    st.title("Model Evaluation Page")
+elif page == "📈 Model Evaluation":
+    st.header("📈 Model Evaluation")
 
     # Define the maximum allowed dataset size for model evaluation
     max_rows_for_evaluation = 5000
@@ -910,18 +977,18 @@ elif page == "Model Evaluation":
         # Check for categorical columns
         categorical_columns = data.select_dtypes(include=['object']).columns
         if not categorical_columns.empty:
-            st.warning("The dataset contains categorical columns. Model evaluation is only supported for datasets without categorical columns.")
+            st.warning("⚠️ The dataset contains categorical columns. Model evaluation is only supported for datasets without categorical columns.")
         elif data.shape[0] > max_rows_for_evaluation or data.shape[1] > max_columns_for_evaluation:
-            st.warning(f"Note: The dataset size exceeds the maximum allowed for model evaluation (max rows: {max_rows_for_evaluation}, max columns: {max_columns_for_evaluation}).")
+            st.warning(f"⚠️ Note: The dataset size exceeds the maximum allowed for model evaluation (max rows: {max_rows_for_evaluation}, max columns: {max_columns_for_evaluation}).")
         else:
             # Select Problem Type
-            problem_type = st.radio("Select Problem Type", ["Classification", "Regression"])
+            problem_type = st.radio("🔧 Select Problem Type", ["Classification", "Regression"])
 
             if problem_type == "Classification":
-                st.subheader("Classification Model Evaluation")
+                st.subheader("📊 Classification Model Evaluation")
 
                 classification_models = ["Random Forest Classifier", "Logistic Regression", "Support Vector Machine"]
-                selected_model = st.selectbox("Select a Classification Model", classification_models)
+                selected_model = st.selectbox("🎯 Select a Classification Model", classification_models)
 
                 model = None
                 if selected_model == "Random Forest Classifier":
@@ -933,11 +1000,11 @@ elif page == "Model Evaluation":
 
                 if model is not None:
                     # Get X and Y variable names from the user using select boxes
-                    x_variables = st.multiselect("Select the X variables", data.columns)
-                    y_variable = st.selectbox("Select the Y variable", data.columns)
+                    x_variables = st.multiselect("📈 Select the X variables", data.columns)
+                    y_variable = st.selectbox("🔍 Select the Y variable", data.columns)
 
                     if y_variable in x_variables:
-                        st.error("Invalid variable names. Y variable must be different from X variables.")
+                        st.error("❌ Invalid selection. Y variable must be different from X variables.")
                     else:
                         # Validate variable names and perform data splitting
                         if len(x_variables) > 0:
@@ -953,21 +1020,21 @@ elif page == "Model Evaluation":
                             accuracy = accuracy_score(y_test, y_pred)
                             f1 = f1_score(y_test, y_pred, average="weighted")
 
-                            st.write(f"Selected Classification Model: {selected_model}")
-                            st.write(f"X Variables: {', '.join(x_variables)}")
-                            st.write(f"Y Variable: {y_variable}")
-                            st.write(f"Accuracy: {accuracy:.2f}")
-                            st.write(f"F1 Score: {f1:.2f}")
+                            st.write(f"📝 **Selected Classification Model**: {selected_model}")
+                            st.write(f"📊 **X Variables**: {', '.join(x_variables)}")
+                            st.write(f"📍 **Y Variable**: {y_variable}")
+                            st.write(f"📈 **Accuracy**: {accuracy:.2f}")
+                            st.write(f"📊 **F1 Score**: {f1:.2f}")
                         else:
-                            st.error("Invalid variable names. Please ensure at least one X variable is selected.")
+                            st.error("❌ Invalid selection. Please ensure at least one X variable is selected.")
                 else:
-                    st.error("An error occurred while selecting the model. Please try again.")
+                    st.error("❌ An error occurred while selecting the model. Please try again.")
 
             elif problem_type == "Regression":
-                st.subheader("Regression Model Evaluation")
+                st.subheader("📉 Regression Model Evaluation")
 
                 regression_models = ["Random Forest Regressor", "Linear Regression", "Support Vector Machine"]
-                selected_model = st.selectbox("Select a Regression Model", regression_models)
+                selected_model = st.selectbox("🎯 Select a Regression Model", regression_models)
 
                 model = None
                 if selected_model == "Random Forest Regressor":
@@ -979,11 +1046,11 @@ elif page == "Model Evaluation":
 
                 if model is not None:
                     # Get X and Y variable names from the user using select boxes
-                    x_variables = st.multiselect("Select the X variables", data.columns)
-                    y_variable = st.selectbox("Select the Y variable", data.columns)
+                    x_variables = st.multiselect("📈 Select the X variables", data.columns)
+                    y_variable = st.selectbox("🔍 Select the Y variable", data.columns)
 
                     if y_variable in x_variables:
-                        st.error("Invalid variable names. Y variable must be different from X variables.")
+                        st.error("❌ Invalid selection. Y variable must be different from X variables.")
                     else:
                         # Validate variable names and perform data splitting
                         if len(x_variables) > 0:
@@ -1000,15 +1067,15 @@ elif page == "Model Evaluation":
                             r2 = r2_score(y_test, y_pred)
                             mse = mean_squared_error(y_test, y_pred)
 
-                            st.write(f"Selected Regression Model: {selected_model}")
-                            st.write(f"X Variables: {', '.join(x_variables)}")
-                            st.write(f"Y Variable: {y_variable}")
-                            st.write(f"Mean Absolute Error (MAE): {mae:.2f}")
-                            st.write(f"R-squared (R^2): {r2:.2f}")
-                            st.write(f"Mean Squared Error (MSE): {mse:.2f}")
+                            st.write(f"📝 **Selected Regression Model**: {selected_model}")
+                            st.write(f"📊 **X Variables**: {', '.join(x_variables)}")
+                            st.write(f"📍 **Y Variable**: {y_variable}")
+                            st.write(f"📈 **Mean Absolute Error (MAE)**: {mae:.2f}")
+                            st.write(f"📊 **R-squared (R²)**: {r2:.2f}")
+                            st.write(f"📉 **Mean Squared Error (MSE)**: {mse:.2f}")
                         else:
-                            st.error("Invalid variable names. Please ensure at least one X variable is selected.")
+                            st.error("❌ Invalid selection. Please ensure at least one X variable is selected.")
                 else:
-                    st.error("An error occurred while selecting the model. Please try again.")
+                    st.error("❌ An error occurred while selecting the model. Please try again.")
     else:
-        st.warning("Please upload a dataset in the 'Data Cleaning' step to continue.")
+        st.warning("📂 Please upload a dataset in the 'Data Cleaning' step to continue.")
