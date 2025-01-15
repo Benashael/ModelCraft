@@ -46,7 +46,6 @@ if uploaded_file is not None:
 
 # App description
 st.title("✨🚀 Model Craft: Accelerate Model Building and Optimization")
-st.write("This application allows you to perform various tasks, including data cleaning 🧹, encoding 🔑, visualization 📊, model selection 🤖, and more. You can upload your dataset 📁 and choose from a variety of machine learning tasks.")
 
 # Create Streamlit pages
 page = st.sidebar.radio("**Select a Page 📄**", [
@@ -68,7 +67,6 @@ page = st.sidebar.radio("**Select a Page 📄**", [
 
 # Introduction Page
 if page == "🏠 Home Page":
-    st.header("✨ Introduction ✨")
 
     st.header("👋 Welcome to the Model Craft Application!")
     st.write("This application is designed to help you streamline the process of data analysis and machine learning model selection. Follow the steps below to make the most of this application:")
