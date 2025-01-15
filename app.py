@@ -889,15 +889,7 @@ elif page == "📉 Regression (ML)":
 
                         # Display additional regression metrics if needed
                         st.write(f"📏 **R2 Score:** {model.score(X_test, Y_test):.2f}")
-                        
-                        st.write("🔍 **Feature Importances:**")
-                        feature_importances = pd.DataFrame({
-                            'Feature': X_variables,
-                            'Importance': model.feature_importances_
-                        })
-                        feature_importances = feature_importances.sort_values(by='Importance', ascending=False)
-                        st.write(feature_importances)
-                        
+                
     else:
         st.warning("📂 Please upload a dataset to continue.")
         
@@ -951,15 +943,6 @@ elif page == "🔍 Clustering (ML)":
                 st.write("📊 Clustered Data Preview:")
                 st.write(X_encoded)
 
-                # Visualize clusters if possible
-                if X_encoded.shape[1] >= 2:
-                    st.subheader("📈 Clustering Visualization")
-                    st.write("Visualizing the first two features for clustering.")
-                    fig, ax = plt.subplots()
-                    ax.scatter(X_encoded.iloc[:, 0], X_encoded.iloc[:, 1], c=X_encoded['Cluster'], cmap='viridis')
-                    ax.set_xlabel(X_encoded.columns[0])
-                    ax.set_ylabel(X_encoded.columns[1])
-                    st.pyplot(fig)
     else:
         st.warning("📂 Please upload a dataset in the 'AutoML for Clustering' step to continue.")
 
