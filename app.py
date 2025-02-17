@@ -26,28 +26,6 @@ st.set_page_config(page_title="Model Craft", page_icon="🤖", layout="wide")
 # App description
 st.title("✨🚀 Model Craft: Accelerate Model Building and Optimization")
 
-"""
-# Define a function to load your dataset
-@st.cache_data
-def load_data(uploaded_file):
-    data = pd.read_csv(uploaded_file)
-    return data
-
-# Upload a dataset
-uploaded_file = st.file_uploader("📤 Upload a CSV file", type=["csv"])
-
-# Initialize data as None
-data = None
-
-# Check if a file was uploaded and if it's valid
-if uploaded_file is not None:
-    try:
-        data = pd.read_csv(uploaded_file)
-        st.success("✅ Dataset uploaded successfully!")
-    except (ValueError, pd.errors.ParserError):
-        st.error("❌ The uploaded dataset is not in a valid format or language. Please upload a valid dataset in CSV format.")
-        data = None  # Set data to None if it's not valid
-"""
 # Initialize session state for controlling input visibility
 if 'show_input' not in st.session_state:
     st.session_state.show_input = True  # Default to True
