@@ -42,33 +42,32 @@ def load_example_data():
     data = pd.read_csv(url)
     return data
 
-# Dataset selection options
-if st.session_state.show_input:
-    option = st.radio("Select Data Input Method:", ["Upload CSV File", "Use Example Dataset"], horizontal=True)
-    
-    if option == "Upload CSV File":
-        uploaded_file = st.file_uploader("📤 Upload a CSV file", type=["csv"])
-        data = None
-        if uploaded_file is not None:
-            try:
-                data = load_data(uploaded_file)
-                st.success("✅ Dataset uploaded successfully!")
-            except (ValueError, pd.errors.ParserError):
-                st.error("❌ Invalid CSV format. Please upload a valid dataset.")
+def get_input():
+    # Dataset selection options
+    if st.session_state.show_input:
+        option = st.radio("Select Data Input Method:", ["Upload CSV File", "Use Example Dataset"], horizontal=True)
+        
+        if option == "Upload CSV File":
+            uploaded_file = st.file_uploader("📤 Upload a CSV file", type=["csv"])
+            data = None
+            if uploaded_file is not None:
+                try:
+                    data = load_data(uploaded_file)
+                    st.success("✅ Dataset uploaded successfully!")
+                except (ValueError, pd.errors.ParserError):
+                    st.error("❌ Invalid CSV format. Please upload a valid dataset.")
+        else:
+            data = load_example_data()
+            st.success("✅ Example dataset loaded successfully!")
     else:
-        data = load_example_data()
-        st.success("✅ Example dataset loaded successfully!")
-else:
-    data = None  # Prevent data loading when input is disabled
+        data = None  # Prevent data loading when input is disabled
 
 # List of pages where the input option should be hidden
 hidden_pages = ["🏠 Home Page", "🔗 Quick Links"]
 
-# Detect current page name (assuming session state has it)
-if "current_page" in st.session_state and st.session_state.current_page in hidden_pages:
-    st.session_state.show_input = False
-else:
-    st.session_state.show_input = True
+if page not in hidden_pages:
+    # Common input section for pages not in the exclude list
+    data = get_input()
 
 # Create Streamlit pages
 page = st.sidebar.radio("**Select a Page 📄**", [
