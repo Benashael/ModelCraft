@@ -48,6 +48,9 @@ if uploaded_file is not None:
         st.error("❌ The uploaded dataset is not in a valid format or language. Please upload a valid dataset in CSV format.")
         data = None  # Set data to None if it's not valid
 """
+# Initialize session state for controlling input visibility
+if 'show_input' not in st.session_state:
+    st.session_state.show_input = True  # Default to True
 
 # Function to load dataset
 @st.cache_data
