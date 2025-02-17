@@ -1060,3 +1060,18 @@ elif page == "📈 Model Evaluation":
                     st.error("❌ An error occurred while selecting the model. Please try again.")
     else:
         st.warning("📂 Please upload a dataset in the 'Data Cleaning' step to continue.")
+
+elif page == "Quick Links 🔗":
+    st.header("🔗 Quick Links")
+    st.write("Click on any link below to navigate to the respective application:")
+
+    links = {
+        "✍️ TextTrac": "https://texttrac-mmmj5kiucvh9muj66gekp4.streamlit.app/",
+        "🧙‍♂️ Vision Wizard": "https://vision-wizard-durnsdepglthkhzx2peekt.streamlit.app/",
+        "📂 Data Weaver": "https://aybzbegfeczo4yfievejqk.streamlit.app/",
+        "🛠️ SkillSync": "https://skillsync-b8xdmwmdezbzf66qpbuj5j.streamlit.app/",
+        "💰 TradeLens": "https://glseycvc2rbucwhk3esh85.streamlit.app/"
+    }
+    
+    for name, url in links.items():
+        st.link_button(name, url, use_container_width=True)
