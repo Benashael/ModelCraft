@@ -26,6 +26,7 @@ st.set_page_config(page_title="Model Craft", page_icon="🤖", layout="wide")
 # App description
 st.title("✨🚀 Model Craft: Accelerate Model Building and Optimization")
 
+"""
 # Define a function to load your dataset
 @st.cache_data
 def load_data(uploaded_file):
@@ -46,7 +47,39 @@ if uploaded_file is not None:
     except (ValueError, pd.errors.ParserError):
         st.error("❌ The uploaded dataset is not in a valid format or language. Please upload a valid dataset in CSV format.")
         data = None  # Set data to None if it's not valid
+"""
 
+# Function to load dataset
+@st.cache_data
+def load_data(uploaded_file):
+    data = pd.read_csv(uploaded_file)
+    return data
+
+# Function to load example dataset
+def load_example_data():
+    url = "example.csv"  # Example dataset
+    data = pd.read_csv(url)
+    return data
+
+# Dataset selection options
+if st.session_state.show_input:
+    option = st.radio("Select Data Input Method:", ["Upload CSV File", "Use Example Dataset"], horizontal=True)
+    
+    if option == "Upload CSV File":
+        uploaded_file = st.file_uploader("📤 Upload a CSV file", type=["csv"])
+        data = None
+        if uploaded_file is not None:
+            try:
+                data = load_data(uploaded_file)
+                st.success("✅ Dataset uploaded successfully!")
+            except (ValueError, pd.errors.ParserError):
+                st.error("❌ Invalid CSV format. Please upload a valid dataset.")
+    else:
+        data = load_example_data()
+        st.success("✅ Example dataset loaded successfully!")
+else:
+    data = None  # Prevent data loading when input is disabled
+    
 # Create Streamlit pages
 page = st.sidebar.radio("**Select a Page 📄**", [
     "🏠 Home Page", 
