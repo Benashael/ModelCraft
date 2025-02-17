@@ -65,10 +65,6 @@ def get_input():
 # List of pages where the input option should be hidden
 hidden_pages = ["🏠 Home Page", "🔗 Quick Links"]
 
-if page not in hidden_pages:
-    # Common input section for pages not in the exclude list
-    data = get_input()
-
 # Create Streamlit pages
 page = st.sidebar.radio("**Select a Page 📄**", [
     "🏠 Home Page", 
@@ -86,6 +82,10 @@ page = st.sidebar.radio("**Select a Page 📄**", [
     "📈 Model Evaluation",
     "🔗 Quick Links"
 ])
+
+if page not in hidden_pages:
+    # Common input section for pages not in the exclude list
+    data = get_input()
 
 # Introduction Page
 if page == "🏠 Home Page":
