@@ -4,7 +4,7 @@ import numpy as np
 # from lazypredict.Supervised import LazyClassifier, LazyRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, MinMaxScaler, StandardScaler
-from sklearn.model_selection import train_test_split, StratifiedKFold, RandomizedSearchCV
+from sklearn.model_selection import train_test_split, StratifiedKFold, RandomizedSearchCV, KFold
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, IsolationForest, GradientBoostingClassifier
 from sklearn.linear_model import LinearRegression, Ridge, Lasso, LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
@@ -639,27 +639,26 @@ elif page == "⚙️ Hyperparameter Tuning":
 
     data = st.session_state.data
     
-    # Check if the dataset and model are available
     if data is not None and not data.empty:
         st.subheader("📊 Dataset Overview")
         st.write("Dataset:")
         st.write(data)
         st.write("📏 **Dataset Shape:**", data.shape)
 
-        # Check if the selected dataset has categorical features
         categorical_cols = data.select_dtypes(include=["object"]).columns
         if not categorical_cols.empty:
             st.error("🚫 Hyperparameter tuning is not supported for datasets with categorical features. Please preprocess your data first.")
         else:
             st.subheader("🤖 Select Machine Learning Model")
             selected_model = st.selectbox("🔍 Choose a Model", ["Logistic Regression (Classification)", "Ridge Regression (Regression)"])
-            # Add more machine learning models as needed
 
             model = None
             hyperparameters = {}
+            is_classification = False  # Track whether it's classification or regression
             
             if selected_model == "Logistic Regression (Classification)":
                 model = LogisticRegression()
+                is_classification = True  # Mark as classification
                 hyperparameters = {
                     "C": st.slider("📏 Inverse of Regularization Strength (C)", 0.001, 10.0),
                     "max_iter": st.slider("🔄 Maximum Iterations (max_iter)", 100, 1000, step=100),
@@ -673,17 +672,13 @@ elif page == "⚙️ Hyperparameter Tuning":
                     "max_iter": st.slider("🔄 Maximum Number of Iterations", 100, 1000, step=100),
                 }
 
-            # Add hyperparameters for other models as needed
-
             if model is not None:
                 st.subheader("🎯 Hyperparameter Tuning")
 
-                # Display the selected hyperparameters
                 st.write("⚙️ **Selected Hyperparameters:**")
                 st.write(hyperparameters)
 
                 try:
-                    # Prompt the user to select target variable and other variables
                     st.subheader("📌 Select Target Variable and Other Variables")
 
                     target_variable = st.selectbox("🎯 Select the Target Variable (y)", data.columns)
@@ -693,7 +688,6 @@ elif page == "⚙️ Hyperparameter Tuning":
                         X_train = data[other_variables]
                         y_train = data[target_variable]
 
-                        # Perform hyperparameter tuning using RandomizedSearchCV
                         st.write("⏳ **Tuning Hyperparameters...**")
                         param_dist = {}
                         for param_name, param_value in hyperparameters.items():
@@ -702,31 +696,37 @@ elif page == "⚙️ Hyperparameter Tuning":
                             else:
                                 param_dist[param_name] = list(range(param_value))
 
+                        # Use StratifiedKFold for classification and KFold for regression
+                        cv_strategy = StratifiedKFold(n_splits=5, shuffle=True, random_state=42) if is_classification else KFold(n_splits=5, shuffle=True, random_state=42)
+
                         randomized_search = RandomizedSearchCV(
                             model, 
                             param_distributions=param_dist, 
                             n_iter=10, 
-                            cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42), 
+                            cv=cv_strategy, 
                             n_jobs=-1
                         )
                         randomized_search.fit(X_train, y_train)
 
                         best_hyperparameters = randomized_search.best_params_
 
-                        # Display the best hyperparameters and their performance
                         st.subheader("🏆 Best Hyperparameters")
                         st.write(best_hyperparameters)
 
-                        # Display the model's performance with the best hyperparameters
                         st.subheader("📈 Model Performance with Best Hyperparameters")
                         best_model = randomized_search.best_estimator_
 
-                        # Split the data for evaluation
                         X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
                         best_model.fit(X_train, y_train)
                         y_pred = best_model.predict(X_test)
-                        accuracy = accuracy_score(y_test, y_pred)
-                        st.write(f"✅ **Accuracy with Best Hyperparameters:** {accuracy:.2f}")
+
+                        # Use accuracy for classification, R² score for regression
+                        if is_classification:
+                            accuracy = accuracy_score(y_test, y_pred)
+                            st.write(f"✅ **Accuracy with Best Hyperparameters:** {accuracy:.2f}")
+                        else:
+                            r2 = r2_score(y_test, y_pred)
+                            st.write(f"📊 **R² Score with Best Hyperparameters:** {r2:.2f}")
 
                     else:
                         st.error("⚠️ Please select a valid target variable and at least one other variable.")
