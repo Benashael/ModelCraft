@@ -255,6 +255,9 @@ elif page == "📋 Data Profiling":
 # Data Encoding Page
 elif page == "🔑 Data Encoding":
     st.header("🔑 Data Encoding")
+    
+    data = st.session_state.data
+    
     if data is not None:
         st.write("### 🗂️ Dataset Overview:")
         st.write(data)
@@ -313,6 +316,8 @@ elif page == "🔑 Data Encoding":
 elif page == "🛠️ Data Preprocessing":
     st.header("🛠️ Data Preprocessing")
 
+    data = st.session_state.data
+    
     # Check if the dataset is available
     if data is not None and not data.empty:
         st.write("### 🗂️ Dataset Overview:")
@@ -444,6 +449,8 @@ elif page == "🛠️ Data Preprocessing":
 elif page == "🧹 Data Cleaning":
     st.header("🧹 Data Cleaning")
 
+    data = st.session_state.data
+    
     # Check if the dataset is available
     if data is not None:
         st.write("📊 **Dataset:**")
@@ -521,6 +528,8 @@ elif page == "🧹 Data Cleaning":
 elif page == "📊 Data Visualization":
     st.header("📊 Data Visualization")
 
+    data = st.session_state.data
+    
     if data is not None:
         # Filter out only numerical columns
         numerical_columns = data.select_dtypes(include=['int64', 'float64'])
@@ -551,6 +560,8 @@ elif page == "📊 Data Visualization":
 elif page == "🎯 Feature Selection":
     st.header("🎯 Feature Selection")
 
+    data = st.session_state.data
+    
     # Check if the dataset is available and within size limits
     if data is not None and not data.empty:
         if data.shape[0] <= 5000 and data.shape[1] <= 50:
@@ -626,6 +637,8 @@ elif page == "🎯 Feature Selection":
 elif page == "⚙️ Hyperparameter Tuning":
     st.header("⚙️ Hyperparameter Tuning")
 
+    data = st.session_state.data
+    
     # Check if the dataset and model are available
     if data is not None and not data.empty:
         st.subheader("📊 Dataset Overview")
@@ -728,6 +741,8 @@ elif page == "⚙️ Hyperparameter Tuning":
 elif page == "🤖 ML Model Selection":
     st.header("🤖 ML Model Selection")
 
+    data = st.session_state.data
+    
     # Function to check for categorical columns
     def has_categorical_columns(data):
         # Identifies if any column in the dataset is of type 'object' (categorical)
@@ -797,6 +812,8 @@ elif page == "🤖 ML Model Selection":
 elif page == "📂 Classification (ML)":
     st.header("📂 Classification (ML)")
 
+    data = st.session_state.data
+    
     if data is not None:
         st.subheader("📊 Dataset Overview")
         st.write("Dataset Preview:")
@@ -858,6 +875,8 @@ elif page == "📂 Classification (ML)":
 elif page == "📉 Regression (ML)":
     st.header("📉 Regression (ML)")
 
+    data = st.session_state.data
+    
     if data is not None:
         st.subheader("📊 Dataset Overview")
         st.write("Dataset Preview:")
@@ -924,6 +943,8 @@ elif page == "📉 Regression (ML)":
 elif page == "🔍 Clustering (ML)":
     st.header("🔍 Clustering (ML)")
 
+    data = st.session_state.data
+    
     # Check if the dataset is available
     if data is not None:
         st.subheader("📊 Dataset Overview")
@@ -977,6 +998,8 @@ elif page == "🔍 Clustering (ML)":
 elif page == "📈 Model Evaluation":
     st.header("📈 Model Evaluation")
 
+    data = st.session_state.data
+    
     # Define the maximum allowed dataset size for model evaluation
     max_rows_for_evaluation = 5000
     max_columns_for_evaluation = 50
