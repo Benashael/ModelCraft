@@ -60,7 +60,16 @@ if st.session_state.show_input:
         st.success("✅ Example dataset loaded successfully!")
 else:
     data = None  # Prevent data loading when input is disabled
-    
+
+# List of pages where the input option should be hidden
+hidden_pages = ["🏠 Home Page", "🔗 Quick Links"]
+
+# Detect current page name (assuming session state has it)
+if "current_page" in st.session_state and st.session_state.current_page in hidden_pages:
+    st.session_state.show_input = False
+else:
+    st.session_state.show_input = True
+
 # Create Streamlit pages
 page = st.sidebar.radio("**Select a Page 📄**", [
     "🏠 Home Page", 
