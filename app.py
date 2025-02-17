@@ -53,11 +53,13 @@ def get_input():
             if uploaded_file is not None:
                 try:
                     data = load_data(uploaded_file)
+                    st.session_state.data = data
                     st.success("✅ Dataset uploaded successfully!")
                 except (ValueError, pd.errors.ParserError):
                     st.error("❌ Invalid CSV format. Please upload a valid dataset.")
         else:
             data = load_example_data()
+            st.session_state.data = data
             st.success("✅ Example dataset loaded successfully!")
     else:
         data = None  # Prevent data loading when input is disabled
