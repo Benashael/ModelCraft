@@ -193,6 +193,8 @@ if page == "🏠 Home Page":
 elif page == "📋 Data Profiling":
     st.header("📋 Data Profiling")
 
+    data = st.session_state.data
+    
     if data is not None and not data.empty:
         st.write("### 🔍 Dataset Overview")
 
