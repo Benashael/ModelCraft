@@ -61,7 +61,8 @@ page = st.sidebar.radio("**Select a Page 📄**", [
     "📂 Classification (ML)", 
     "📉 Regression (ML)", 
     "🔍 Clustering (ML)", 
-    "📈 Model Evaluation"
+    "📈 Model Evaluation",
+    "🔗 Quick Links"
 ])
 
 # Introduction Page
@@ -1061,7 +1062,7 @@ elif page == "📈 Model Evaluation":
     else:
         st.warning("📂 Please upload a dataset in the 'Data Cleaning' step to continue.")
 
-elif page == "Quick Links 🔗":
+elif page == "🔗 Quick Links":
     st.header("🔗 Quick Links")
     st.write("Click on any link below to navigate to the respective application:")
 
