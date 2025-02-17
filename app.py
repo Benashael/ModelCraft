@@ -43,6 +43,9 @@ def load_example_data():
     return data
 
 def get_input():
+    if "data" not in st.session_state:
+        st.session_state.data = None
+    
     # Dataset selection options
     if st.session_state.show_input:
         option = st.radio("Select Data Input Method:", ["Upload CSV File", "Use Example Dataset"], horizontal=True)
